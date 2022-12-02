@@ -1,7 +1,6 @@
 import random
 import secrets
 import string
-import uuid
 import sys
 
 lettersLow = string.ascii_lowercase
@@ -19,9 +18,9 @@ def generator() :
         generator()
     else:
         print(f'Password length set to {passLength}')
-
+    passLength = int(passLength)
     parameters = []
-    parameters = input("Select password features, separate with space: \n \n" 
+    parameters = input("Select password features, separate with comma: \n \n" 
         + "Upper case letters    1 \n"
         + "Numbers               2 \n"
         + "Special characters    3 \n"
@@ -29,7 +28,7 @@ def generator() :
         + "None                  0 \n"
         + "Exit program          99 \n")
 
-    parameters = parameters.split(' ')
+    parameters = parameters.split(',')
     parameters = list(map(int, parameters))
     for attribute in parameters:
         if attribute < 0:
