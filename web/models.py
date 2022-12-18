@@ -14,5 +14,6 @@ class Vault(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userID = db.Column(db.Integer, db.ForeignKey('user.id'))
     service = db.Column(db.String(50))
+    username = db.Column(db.String(50))
     passw = db.Column(db.String(50))
     date = db.Column(db.DateTime(timezone=True), default=func.now())

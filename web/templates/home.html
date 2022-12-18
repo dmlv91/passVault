@@ -3,14 +3,40 @@
 {% block content %}
 
 <h1 align="center">Vault</h1>
-<ul class="list-group list-group-flush" id="passes">
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Service</th>
+        <th scope="col">Username</th>
+        <th scope="col">Password</th>
+        <th scope="col">Date added</th>
+      </tr>
+    </thead>
+    <tbody>
     {% for Vault in user.passwords %}
-    <li class="list-group-item">{{Vault.data}}</li>
+      <tr>
+        <th scope="row">{{Vault.id}}</th>
+        <td>{{Vault.service}}</td>
+        <td>{{Vault.username}}</td>
+        <td>{{Vault.passw}}</td>
+        <td>{{Vault.date}}</td>
+        <td>
+        <button type="button" class="close" onClick="deleteEntry({{ Vault.id }})">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </td>
+      </tr>
     {% endfor %}
-</ul>
+    </tbody>
+  </table>
 <form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <div align="center">
+    <textarea 
+    name="newEntry" 
+    id="newEntry" 
+    class="form-control" 
+    placeholder="Add service,username and password, separate with comma!"></textarea>
+    <div align="center" padding-top="50px">
         <button type="submit" class="btn btn-primary">Add to vault</button>
     </div>
 </form>
