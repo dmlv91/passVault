@@ -19,7 +19,9 @@
         <th scope="row">{{Vault.id}}</th>
         <td>{{Vault.service}}</td>
         <td>{{Vault.username}}</td>
-        <td>{{Vault.passw}}</td>
+        <td>************ 
+          <button type="button" class="btn btn-secondary" onClick="showPass({{Vault.id}})">Show</button>
+          {{Vault.passw}}</td>
         <td>{{Vault.date}}</td>
         <td>
         <button type="button" class="close" onClick="deleteEntry({{ Vault.id }})">

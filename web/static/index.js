@@ -6,3 +6,7 @@ function deleteEntry(entryID) {
         window.location.href = "/";
     });
 }
+
+function showPass(entryID) {
+    
+}
