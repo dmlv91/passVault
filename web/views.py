@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, abort, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import Vault
 from . import db
 import json
+from flask_modals import render_template_modal
 
 views = Blueprint('views', __name__)
 
@@ -35,3 +36,17 @@ def deleteEntry():
             db.session.commit()
         
     return jsonify({})
+
+# @views.route('/add-entry', methods=['POST'])
+# def newEntry():
+#     if not request.form:
+#         abort(400)
+#     entry = Vault(
+#         service=request.form.get('service'),
+#         username=request.form.get('username'),
+#         passw=request.form.get('password')
+#     )
+#     db.session.add(entry)
+#     db.session.commit()
+
+#     return render_template("home.html")

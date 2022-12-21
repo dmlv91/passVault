@@ -19,9 +19,7 @@
         <th scope="row">{{Vault.id}}</th>
         <td>{{Vault.service}}</td>
         <td>{{Vault.username}}</td>
-        <td>************ 
-          <button type="button" class="btn btn-secondary" onClick="showPass({{Vault.id}})">Show</button>
-          {{Vault.passw}}</td>
+        <td>{{Vault.passw}}</td>
         <td>{{Vault.date}}</td>
         <td>
         <button type="button" class="close" onClick="deleteEntry({{ Vault.id }})">
@@ -39,7 +37,7 @@
     class="form-control" 
     placeholder="Add service,username and password, separate with comma!"></textarea>
     <div align="center" padding-top="50px">
-        <button type="submit" class="btn btn-primary">Add to vault</button>
+        <button type="submit" class="btn btn-primary">Add new entry to Vault</button>
     </div>
 </form>
 {% endblock %}
