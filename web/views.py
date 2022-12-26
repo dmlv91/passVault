@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, abort, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import Vault
 from . import db
@@ -9,18 +9,25 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET','POST'])
 @login_required
 def home():
-    if request.method == 'POST':
-        newEntry = request.form.get('newEntry').split(",")
-        service = str(newEntry[0])
-        username = str(newEntry[1])
-        passw = str(newEntry[2])
-        if len(str(newEntry)) < 1:
-            flash('error', category='error')
-        else:            
-            newEntry = Vault(service = service,username=username,passw=passw, userID=current_user.id)
-            db.session.add(newEntry)
-            db.session.commit()
-            flash('Success', category='success')
+    # if request.method == 'POST':
+    #     newEntry = Vault(
+    #         service = request.form['service-name'],
+    #         username = request.form['username'],
+    #         passw = request.form['password']
+    #     )
+    #     if len(newEntry.service,newEntry.username,newEntry.passw) < 1:
+    #         flash('error', category='error')
+    #     else:
+    #         db.session.add(newEntry)
+    #         db.session.commit()
+    #         flash('Success', category='success')
+    #     if len(service) < 1:
+    #        flash('error', category='error')
+    #     else:            
+    #        newEntry = Vault(service = service,username=username,passw=passw, userID=current_user.id)
+    #        db.session.add(newEntry)
+    #        db.session.commit()
+    #        flash('Success', category='success')
 
     return render_template("home.html", user=current_user)
 
@@ -35,3 +42,25 @@ def deleteEntry():
             db.session.commit()
         
     return jsonify({})
+
+@views.route("/modal", methods=['GET','POST'])
+def modal():
+    if request.method == 'POST':
+        newEntry = json.loads(request.data)
+        service = newEntry['service']
+        username = newEntry['username']
+        passw = newEntry['password']
+        print(newEntry)
+        newEntry = Vault(
+            service = service,
+            username = username,
+            passw = passw
+        )
+        if len(str(service)) < 1:
+            flash('error', category='error')
+        else:
+            db.session.add(newEntry)
+            db.session.commit()
+            flash('Success', category='success')
+
+    return render_template("modal.html", user=current_user)

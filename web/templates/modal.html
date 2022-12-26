@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block modal %}
+<div class="modal" id="newEntry" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- <form method="post" id="newEntry"> -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" id="newEntry">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New Vault entry:</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="service" class="col-form-label">Service:</label>
+                        <input type="text" class="form-control" name="service" id="service">
+                    </div>
+                    <div class="form-group">
+                        <label for="usrname" class="col-form-label">Username:</label>
+                        <input type="text" class="form-control" name="username" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-form-label">Password:</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{url_for('views.home')}}" class="btn btn-primary">Close</a>
+                    <button type="submit" name="submit" id="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- </form> -->
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $("#newEntry").modal("show")
+        $('#newEntry').on("submit", function (event) {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            const newEntry= Object.fromEntries(data.entries());
+            console.log($('#service').val())
+            console.log($('#username').val())
+            console.log($('#password').val())
+            console.log({newEntry});
+            $.ajax({
+                url: "/modal",
+                method: 'POST',
+                data: newEntry,
+                dataType: 'JSON',
+                error: function(req, err) {console.log('err is: ' + err);},
+                // beforeSend: function () {
+                //     $('#submit').attr('disabled', 'disabled');
+                // },
+                success: function (data) {
+                    $('#newEntry').modal('hide');
+                    if (data == 'success') {
+                        window.location.href = "/";
+                        console.log("wassup")
+
+                    }
+                }
+            });
+            
+        })
+    });
+</script>
+{% endblock %}

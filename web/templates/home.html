@@ -31,13 +31,14 @@
     </tbody>
   </table>
 <form method="POST">
-    <textarea 
+    <!--<textarea 
     name="newEntry" 
     id="newEntry" 
     class="form-control" 
     placeholder="Add service,username and password, separate with comma!"></textarea>
+    -->
     <div align="center" padding-top="50px">
-        <button type="submit" class="btn btn-primary">Add to vault</button>
+       <a href="{{url_for('views.modal')}}" class="btn btn-primary">Add new entry to Vault</a>
     </div>
 </form>
 {% endblock %}
