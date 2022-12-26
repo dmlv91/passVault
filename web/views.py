@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from .models import Vault
 from . import db
 import json
-from flask_modals import render_template_modal
 
 views = Blueprint('views', __name__)
 
