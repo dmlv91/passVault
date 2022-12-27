@@ -38,30 +38,39 @@
         $("#newEntry").modal("show")
         $('#newEntry').on("submit", function (event) {
             event.preventDefault();
-            const data = new FormData(event.target);
-            const newEntry= Object.fromEntries(data.entries());
-            console.log($('#service').val())
-            console.log($('#username').val())
-            console.log($('#password').val())
-            console.log({newEntry});
-            $.ajax({
-                url: "/modal",
-                method: 'POST',
-                data: newEntry,
-                dataType: 'JSON',
-                error: function(req, err) {console.log('err is: ' + err);},
-                // beforeSend: function () {
-                //     $('#submit').attr('disabled', 'disabled');
-                // },
-                success: function (data) {
-                    $('#newEntry').modal('hide');
-                    if (data == 'success') {
-                        window.location.href = "/";
-                        console.log("wassup")
+            if ($('#service').val() == "") {
+                alert("Service name must be filled")
+            } else if ($('#username').val() == "") {
+                alert("Username must be filled")
+            } else if ($('#password').val() == "") {
+                alert("Password must be filled")
+            } else {
+                const data = new FormData(event.target);
+                const newEntry= Object.fromEntries(data.entries());
+                $.post({
+                    url: "/modal",
+                    data: JSON.stringify(newEntry),
+                    contentType: "application/json",
+                    error: function(xhr) {
+                        var err = JSON.parse(xhr.responseText);
+                        alert(err.message);
+                        //console.log('err is: ' + err);
+                    },
+                    beforeSend: function () {
+                        $('#submit').attr('disabled', 'disabled');
+                     },
+                    success: function (data) {
+                        if (data == 'success') {
+                            $('#newEntry').modal('hide');
+                            window.location.href = "/";
 
+                        } else {
+                            console.log("something wrong")
+                        }
                     }
-                }
-            });
+                });
+            }
+            
             
         })
     });

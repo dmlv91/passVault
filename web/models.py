@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+import pytz
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,4 +17,4 @@ class Vault(db.Model):
     service = db.Column(db.String(50))
     username = db.Column(db.String(50))
     passw = db.Column(db.String(50))
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    date = db.Column(db.DateTime(timezone=True), default=func.now(pytz.timezone('Europe/Paris')))

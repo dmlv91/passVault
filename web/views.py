@@ -9,25 +9,6 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET','POST'])
 @login_required
 def home():
-    # if request.method == 'POST':
-    #     newEntry = Vault(
-    #         service = request.form['service-name'],
-    #         username = request.form['username'],
-    #         passw = request.form['password']
-    #     )
-    #     if len(newEntry.service,newEntry.username,newEntry.passw) < 1:
-    #         flash('error', category='error')
-    #     else:
-    #         db.session.add(newEntry)
-    #         db.session.commit()
-    #         flash('Success', category='success')
-    #     if len(service) < 1:
-    #        flash('error', category='error')
-    #     else:            
-    #        newEntry = Vault(service = service,username=username,passw=passw, userID=current_user.id)
-    #        db.session.add(newEntry)
-    #        db.session.commit()
-    #        flash('Success', category='success')
 
     return render_template("home.html", user=current_user)
 
@@ -46,21 +27,18 @@ def deleteEntry():
 @views.route("/modal", methods=['GET','POST'])
 def modal():
     if request.method == 'POST':
-        newEntry = json.loads(request.data)
-        service = newEntry['service']
-        username = newEntry['username']
-        passw = newEntry['password']
-        print(newEntry)
-        newEntry = Vault(
-            service = service,
-            username = username,
-            passw = passw
-        )
-        if len(str(service)) < 1:
-            flash('error', category='error')
-        else:
+        try:
+            newEntry = request.get_json()
+            newEntry = Vault(
+                service = newEntry['service'],
+                username = newEntry['username'],
+                passw = newEntry['password'],
+                userID = current_user.id
+            )
             db.session.add(newEntry)
             db.session.commit()
             flash('Success', category='success')
-
+            return "success"
+        except json.JSONDecodeError:
+            flash('Empty response', category='error')
     return render_template("modal.html", user=current_user)
