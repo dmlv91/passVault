@@ -1,22 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'home.html' %}
 {% block modal %}
-<div class="modal" id="newEntry" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <!-- <form method="post" id="newEntry"> -->
+<div class="modal" id="passCheck" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form method="post" id="newEntry">
+            <form method="post" id="passCheck">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Vault entry:</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Please confirm Your identity:</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="service" class="col-form-label">Service:</label>
-                        <input type="text" class="form-control" name="service" id="service">
-                    </div>
-                    <div class="form-group">
-                        <label for="usrname" class="col-form-label">Username:</label>
-                        <input type="text" class="form-control" name="username" id="username">
-                    </div>
                     <div class="form-group">
                         <label for="password" class="col-form-label">Password:</label>
                         <input type="password" class="form-control" name="password" id="password">
@@ -35,21 +26,15 @@
 {% block script %}
 <script>
     $(document).ready(function () {
-        $("#newEntry").modal("show")
-        $('#newEntry').on("submit", function (event) {
+        $("#passCheck").modal("show")
+        $('#passCheck').on("submit", function (event) {
             event.preventDefault();
-            if ($('#service').val() == "") {
-                alert("Service name must be filled")
-            } else if ($('#username').val() == "") {
-                alert("Username must be filled")
-            } else if ($('#password').val() == "") {
+            if ($('#password').val() == "") {
                 alert("Password must be filled")
             } else {
-                const data = new FormData(event.target);
-                const newEntry= Object.fromEntries(data.entries());
                 $.post({
-                    url: "/modal",
-                    data: JSON.stringify(newEntry),
+                    url: "/modal_passCheck",
+                    data: "",
                     contentType: "application/json",
                     error: function(xhr) {
                         var err = JSON.parse(xhr.responseText);
@@ -60,8 +45,8 @@
                         $('#submit').attr('disabled', 'disabled');
                      },
                     success: function (data) {
-                        if (data == 'success') {
-                            $('#newEntry').modal('hide');
+                        if (data == '0') {
+                            $('#passCheck').modal('hide');
                             window.location.href = "/";
 
                         } else {

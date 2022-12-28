@@ -24,8 +24,8 @@ def deleteEntry():
         
     return jsonify({})
 
-@views.route("/modal", methods=['GET','POST'])
-def modal():
+@views.route("/modal_insert", methods=['GET','POST'])
+def modal_insert():
     if request.method == 'POST':
         try:
             newEntry = request.get_json()
@@ -41,4 +41,16 @@ def modal():
             return "success"
         except json.JSONDecodeError:
             flash('Empty response', category='error')
-    return render_template("modal.html", user=current_user)
+    return render_template("modal_insert.html", user=current_user)
+
+@views.route("/modal_passCheck", methods=['GET', 'POST'])
+def modal_passCheck():
+    if request.method == 'POST':
+        try:
+            passphrase = request.get_json()
+            return 0
+
+        except json.JSONDecodeError:
+            flash('Empty response', category='error')
+
+    return render_template("modal_passCheck.html", user=current_user)
