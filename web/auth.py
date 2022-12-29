@@ -1,9 +1,9 @@
 from flask import Blueprint,render_template,request,flash,redirect,url_for
-import rsa
 from .models import User
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
+from .crypto import generate
 
 auth = Blueprint('auth', __name__)
 
@@ -52,7 +52,8 @@ def signUp():
         elif password1 != password2:
             flash('Passwords don\'t match!', category='error')
         else:
-            newUser = User(email = email, firstName = firstName, lastName = lastName, password = generate_password_hash(password1, method='sha256'))
+            passKey = generate(password1)
+            newUser = User(email = email, firstName = firstName, lastName = lastName, passKey = passKey, password = generate_password_hash(password1, method='sha256'))
             db.session.add(newUser)
             db.session.commit()
             login_user(newUser, remember=True)

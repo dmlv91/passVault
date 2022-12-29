@@ -8,6 +8,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True)
     firstName = db.Column(db.String(30))
     lastName = db.Column(db.String(50))
+    passKey = db.Column(db.String(100))
     password = db.Column(db.String(30))
     passwords = db.relationship('Vault')
 
