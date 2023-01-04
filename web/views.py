@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from .models import Vault
 from . import db
 import json
+from .crypto import pass_encrypt, pass_decrypt
 
 views = Blueprint('views', __name__)
 
@@ -29,11 +30,12 @@ def modal_insert():
     if request.method == 'POST':
         try:
             newEntry = request.get_json()
+            master = newEntry['master']
             newEntry = Vault(
                 service = newEntry['service'],
                 username = newEntry['username'],
-                passw = newEntry['password'],
-                userID = current_user.id
+                passw = pass_encrypt(newEntry['password'].encode(),master),
+                userID = current_user.id,
             )
             db.session.add(newEntry)
             db.session.commit()
@@ -47,8 +49,13 @@ def modal_insert():
 def modal_passCheck():
     if request.method == 'POST':
         try:
-            passphrase = request.get_json()
-            return 0
+            newData = request.get_json()
+            print(newData)
+            passphrase = newData['password']
+            service = newData['service']
+            user = newData['username']
+            token = db.select([Vault.columns.passw]).where(Vault.columns.service == service, Vault.columns.username == user)
+            return pass_decrypt(token,passphrase)
 
         except json.JSONDecodeError:
             flash('Empty response', category='error')

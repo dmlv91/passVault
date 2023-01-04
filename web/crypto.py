@@ -8,8 +8,6 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 backend = default_backend
 iterations = 100000
 salt = os.urandom(16)
-message = "My secret message"
-passw = "Mypass"
 
 
 def _derive_key(passw: str, salt: bytes = salt, iterations: int = iterations) -> bytes:
@@ -33,7 +31,7 @@ def pass_encrypt(message: bytes, passw: str, salt: bytes = salt, iterations: int
         )
     )
 
-token = pass_encrypt(message.encode(),passw)
+#token = pass_encrypt(message.encode(),passw)
 
 def pass_decrypt(token: bytes, passw: str) -> bytes:
     decoded = b64d(token)
@@ -45,8 +43,3 @@ def pass_decrypt(token: bytes, passw: str) -> bytes:
 def generate(passw: str):
     key = _derive_key(passw, salt, iterations)
     return key
-
-print("Original:  ", message)
-print("Encrypted: ", pass_encrypt(message.encode(), passw))
-
-print("Decrypted: ", pass_decrypt(token, passw).decode())
