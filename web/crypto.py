@@ -31,8 +31,6 @@ def pass_encrypt(message: bytes, passw: str, salt: bytes = salt, iterations: int
         )
     )
 
-#token = pass_encrypt(message.encode(),passw)
-
 def pass_decrypt(token: bytes, passw: str) -> bytes:
     decoded = b64d(token)
     salt,iter,token = decoded[:16],decoded[16:20], b64e(decoded[20:])

@@ -11,21 +11,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <span id="service"></span>
-                        <span id="username"></span>
-                    </div>
-
-                    <div class="form-group">
                         <label for="password" class="col-form-label">Password:</label>
-                        <input  type="password" 
-                                class="form-control" 
-                                name="password" 
-                                id="password"
-                                placeholder="Master password">
+                        <input type="password" class="form-control" name="password" id="password"
+                            placeholder="Master password">
                     </div>
                     <div class="secret-container">
                         <span id="secret"></span>
-		                <button class="btn btn-secondary" id="clipboard" disbled>Copy</button>
+                        <button type="button" class="btn btn-secondary" id="clipboard" enabled>Copy</button>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -35,47 +27,71 @@
             </form>
         </div>
     </div>
-    <!-- </form> -->
 </div>
 {% endblock %}
 {% block script %}
 <script>
     $(document).ready(function () {
         $("#passCheck").modal("show")
-        console.log("Service " + service)
         $('#passCheck').on("submit", function (event) {
             event.preventDefault();
             if ($('#password').val() == "") {
                 alert("Password must be filled")
             } else {
-                const data = new FormData(event.target);
-                const passphrase = Object.fromEntries(data.entries());
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const entryId = urlParams.get('entryID');
+                var data = {
+                    entryID: entryId,
+                    password: $('#password').val()
+                };
+
                 $.post({
                     url: "/modal_passCheck",
-                    data: JSON.stringify(passphrase),
+                    data: JSON.stringify(data),
                     contentType: "application/json",
-                    error: function(xhr) {
-                        var err = JSON.parse(xhr.responseText);
-                        alert(err.message);
-                        //console.log('err is: ' + err);
+                    error: function (xhr) {
+                        console.log('err', xhr);
+                        // var err = JSON.parse(xhr.responseText);
+                        // alert(err.message);
                     },
                     beforeSend: function () {
-                        $('#submit').attr('disabled', 'disabled');
-                     },
+                        // $b('#sumit').attr('disabled', 'disabled');
+                    },
                     success: function (data) {
-                        if (data == '0') {
-                            $('#passCheck').modal('hide');
-                            window.location.href = "/";
-
+                        if (data == "wrongPass") {
+                            alert("Wrong password!!!")
                         } else {
-                            console.log("something wrong")
+                            document.getElementById('secret').innerHTML = data;
                         }
+
                     }
                 });
             }
-            
-            
-        })
+
+
+        });
+
+        const clipboard = document.getElementById('clipboard');
+        const resultEl = document.getElementById('secret');
+
+        clipboard.addEventListener('click', () => {
+            console.log("click")
+            const textarea = document.createElement('textarea');
+            const password = resultEl.innerText;
+
+            if (!password) { return; }
+
+            textarea.value = password;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            textarea.remove();
+            alert('Password copied to clipboard');
+        });
+
     });
+
+
 </script>
 {% endblock %}

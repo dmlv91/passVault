@@ -10,18 +10,21 @@
         <th scope="col">Service</th>
         <th scope="col">Username</th>
         <th scope="col">Password</th>
+        <th scope="col"></th>
         <th scope="col">Date added</th>
       </tr>
     </thead>
     <tbody>
     {% for Vault in user.passwords %}
       <tr>
-        <th scope="row">{{Vault.id}}</th>
-        <td class="service">{{Vault.service}}</td>
-        <td class="username">{{Vault.username}}</td>
-        <td>{{Vault.passw.decode()[:20]}}
-          <a href="{{url_for('views.modal_passCheck')}}" class="btn" id="showPass" data-target="#passCheck">
-            <i class="fa-solid fa-eye"></i>
+        <th scope="row" id="id">{{Vault.id}}</th>
+        <td>{{Vault.service}}</td>
+        <td>{{Vault.username}}</td>
+        <td>{{Vault.passw[:20]}}</td>
+        <td>
+            <!-- <a href="{{url_for('views.modal_passCheck')}}" class="btn" id="showPass">
+                <i class="fa-solid fa-eye"></i> -->
+            <a href="/modal_passCheck?entryID={{Vault.id}}" class="btn btn-success">Show password</a>    
         </td>
         <td>{{Vault.date}}</td>
         <td>
@@ -77,19 +80,6 @@
 {% endblock %}
 {% block script %}
 <script>
-
-    $(function () {
-
-        $("#showPass").click(function () {
-            var service = $(this).parents("tr").find(".service").text();
-            var username = $(this).parents("tr").find(".username").text();
-            var data = "";
-            data += "<p id='service' name='service'> SERVICE: " + service + "</p>";
-            data += "<p id='username' name='username'> USERNAME: " + username + "</p>";
-            $("#divDATA").empty();
-            $("#divDATA").append(data);
-        });
-    });
     
 
     const resultEl = document.getElementById('result');
