@@ -38,6 +38,7 @@
             if ($('#password').val() == "") {
                 alert("Password must be filled")
             } else {
+                //get data from url string and user input
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
                 const entryId = urlParams.get('entryID');
@@ -52,16 +53,15 @@
                     contentType: "application/json",
                     error: function (xhr) {
                         console.log('err', xhr);
-                        // var err = JSON.parse(xhr.responseText);
-                        // alert(err.message);
                     },
                     beforeSend: function () {
-                        // $b('#sumit').attr('disabled', 'disabled');
+
                     },
                     success: function (data) {
                         if (data == "wrongPass") {
                             alert("Wrong password!!!")
                         } else {
+                            //show user decrypted password
                             document.getElementById('secret').innerHTML = data;
                         }
 

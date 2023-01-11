@@ -22,8 +22,6 @@
         <td>{{Vault.username}}</td>
         <td>{{Vault.passw[:20]}}</td>
         <td>
-            <!-- <a href="{{url_for('views.modal_passCheck')}}" class="btn" id="showPass">
-                <i class="fa-solid fa-eye"></i> -->
             <a href="/modal_passCheck?entryID={{Vault.id}}" class="btn btn-success">Show password</a>    
         </td>
         <td>{{Vault.date}}</td>
@@ -43,7 +41,7 @@
 </form>
 
 <div class="container">
-	<h2>Password Generator</h2>
+	<h5>Password Generator</h5>
 	<div class="result-container">
 		<span id="result"></span>
 		<button class="btn" id="clipboard">
@@ -81,7 +79,7 @@
 {% block script %}
 <script>
     
-
+    //Define variables from generators html elements
     const resultEl = document.getElementById('result');
     const lengthEl = document.getElementById('length');
     const uppercaseEl = document.getElementById('uppercase');
@@ -91,6 +89,7 @@
     const generateEl = document.getElementById('generate');
     const clipboard = document.getElementById('clipboard');
 
+    //user parameter randomizer for password generator
     const randomFunc = {
         lower: getRandomLower,
         upper: getRandomUpper,
@@ -98,6 +97,7 @@
         symbol: getRandomSymbol
     }
 
+    //Copy generated password to clipboard
     clipboard.addEventListener('click', () => {
         const textarea = document.createElement('textarea');
         const password = resultEl.innerText;
@@ -112,6 +112,7 @@
         alert('Password copied to clipboard');
     });
 
+    //password parameter selection
     generate.addEventListener('click', () => {
         const length = +lengthEl.value;
         const hasLower = lowercaseEl.checked;
@@ -122,6 +123,7 @@
         resultEl.innerText = generatePassword(hasLower, hasUpper, hasNumber, hasSymbol, length);
     });
 
+    //Random string generator with all variable user parameters
     function generatePassword(lower, upper, number, symbol, length) {
         let generatedPassword = '';
         const typesCount = lower + upper + number + symbol;
@@ -152,6 +154,7 @@
         return finalPassword;
     }
 
+    //utility functions to generate different kind of values for password string
     function getRandomLower() {
         return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
     }

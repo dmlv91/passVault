@@ -58,6 +58,7 @@
         $("#newEntry").modal("show")
         $('#newEntry').on("submit", function (event) {
             event.preventDefault();
+            //user input check
             if ($('#service').val() == "") {
                 alert("Service name must be filled")
             } else if ($('#username').val() == "") {
@@ -65,6 +66,7 @@
             } else if ($('#password').val() == "") {
                 alert("Password must be filled")
             } else {
+                //Create data object from html formdata and make post request with it
                 const data = new FormData(event.target);
                 const newEntry= Object.fromEntries(data.entries());
                 $.post({
@@ -74,13 +76,14 @@
                     error: function(xhr) {
                         var err = JSON.parse(xhr.responseText);
                         alert(err.message);
-                        //console.log('err is: ' + err);
                     },
+                    //disable submit button to prevent double requests
                     beforeSend: function () {
                         $('#submit').attr('disabled', 'disabled');
                      },
                     success: function (data) {
                         if (data == 'success') {
+                            //close modal window on success
                             $('#newEntry').modal('hide');
                             window.location.href = "/";
 

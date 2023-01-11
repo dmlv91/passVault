@@ -6,6 +6,7 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 DB_NAME = "passVault.db"
 
+#Create flask web server instance with login functionality and database
 def createApp():
 
     app = Flask(__name__)
