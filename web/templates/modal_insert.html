@@ -79,14 +79,18 @@
                     },
                     //disable submit button to prevent double requests
                     beforeSend: function () {
-                        $('#submit').attr('disabled', 'disabled');
+                        //$('#submit').attr('disabled', 'disabled');
                      },
                     success: function (data) {
                         if (data == 'success') {
+                            //disable submit button
+                            $('#submit').attr('disabled', 'disabled');
                             //close modal window on success
                             $('#newEntry').modal('hide');
                             window.location.href = "/";
-
+                        
+                        } else if (data == 'wrongPass') {
+                            alert("Master password is not correct!");
                         } else {
                             console.log("something wrong")
                         }

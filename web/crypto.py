@@ -36,6 +36,7 @@ def pass_decrypt(token: bytes, passw: str) -> bytes:
     salt,iter,token = decoded[:16],decoded[16:20], b64e(decoded[20:])
     iterations = int.from_bytes(iter, 'big')
     key = b64e(_derive_key(passw,salt, iterations))
+    print(key)
     return Fernet(key).decrypt(token)
 
 #Function to transfer parameters from outside resources to key derivation function
