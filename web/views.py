@@ -12,7 +12,6 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET','POST'])
 @login_required
 def home():
-    print(current_user)
     return render_template("home.html", user=current_user)
     
 #Route for entry deletion from database
@@ -42,10 +41,6 @@ def modal_insert():
             if check_password_hash(user.password, master):
                 #encrypt password entry and insert into database
                 passw = pass_encrypt(newEntry['password'].encode(),master)
-                stmt = select(User.passKey).where(User.id == current_user.id)
-                for row in db.session.execute(stmt):
-                    key = str(row)
-                print(key)
                 #Create database entry object and commit data to database
                 newEntry = Vault(
                     service = newEntry['service'],
@@ -77,10 +72,6 @@ def modal_passCheck():
             user = User.query.filter_by(id=current_user.id).first()
             #Check if users input hash == MASTER passwords hash
             if check_password_hash(user.password, passphrase):
-                stmt = select(User.passKey).where(User.id == current_user.id)
-                for row in db.session.execute(stmt):
-                    key = str(row)
-                print(key)
                 #Get stored encrypted password from Vault and use it for decryption
                 stmt = select(Vault.passw).where(Vault.id == entryID)
                 for row in db.session.execute(stmt):

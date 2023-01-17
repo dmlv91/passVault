@@ -63,14 +63,11 @@ def signUp():
         elif password1 != password2:
             flash('Passwords don\'t match!', category='error')
         else:
-            #Generate a cryptographic key that can be used for data encryption
-            passKey = generate(password1)
             #Create User object and insert entry into database
             newUser = User(
                 email = email, 
                 firstName = firstName, 
-                lastName = lastName, 
-                passKey = passKey, 
+                lastName = lastName,  
                 #Hash password before database insertion so it can be stored safely 
                 password = generate_password_hash(password1, method='sha256')
                 )
